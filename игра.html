@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Академия цифровой грамотности | ГАПОУ "СГК"</title>
+    <style>
+        :root {
+            --bg-light: #f4f7fc;
+            --bg-white: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --accent-primary: #4f46e5;
+            --accent-secondary: #06b6d4;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+            --border-light: #e2e8f0;
+            --shadow-soft: 0 4px 20px rgba(79, 70, 229, 0.08);
+            --shadow-hover: 0 10px 30px rgba(79, 70, 229, 0.15);
+            --font-main: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-main); }
+
+        body {
+            background-color: var(--bg-light);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 40%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- Шапка --- */
+        header {
+            background: var(--bg-white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .college-info { display: flex; align-items: center; gap: 15px; }
+
+        .college-logo {
+            width: 50px; height: 50px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 800; font-size: 14px;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .college-name { font-size: 16px; font-weight: 700; line-height: 1.2; }
+        .college-name span { display: block; font-size: 12px; font-weight: 400; color: var(--text-muted); }
+
+        .score-board { display: flex; gap: 15px; }
+
+        .score-item {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--bg-light); padding: 8px 18px;
+            border-radius: 20px; font-size: 14px; font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .score-item.blue { color: var(--accent-primary); }
+        .score-item.green { color: var(--accent-green); }
+        .score-item:hover { transform: scale(1.05); }
+
+        .header-bottom {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 40px;
+            background: linear-gradient(90deg, rgba(79, 70, 229, 0.03), rgba(6, 182, 212, 0.03));
+            font-size: 13px; color: var(--text-muted);
+        }
+
+        .developers { display: flex; gap: 20px; flex-wrap: wrap; }
+        .developer { display: flex; align-items: center; gap: 6px; }
+        .developer-icon { font-size: 16px; }
+
+        /* --- Контейнер --- */
+        .container {
+            max-width: 1100px; margin: 0 auto; padding: 40px 20px;
+            width: 100%; flex: 1; display: flex; flex-direction: column;
+        }
+
+        /* --- Экраны --- */
+        .screen { display: none; animation: slideUp 0.5s ease-out; flex: 1; }
+        .screen.active { display: flex; flex-direction: column; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Главный экран --- */
+        .hero { text-align: center; margin-bottom: 50px; position: relative; }
+
+        .hero h1 { font-size: 44px; margin-bottom: 15px; line-height: 1.2; }
+        .hero h1 span {
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p { color: var(--text-muted); font-size: 18px; max-width: 700px; margin: 0 auto 30px; }
+
+        .hero-stats { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; }
+        .hero-stat { text-align: center; }
+        .hero-stat-value { font-size: 28px; font-weight: 800; color: var(--accent-primary); }
+        .hero-stat-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px; margin-bottom: 40px;
+        }
+
+        .module-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .module-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+
+        .module-image {
+            width: 100%;
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .module-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.2), rgba(30, 41, 59, 0.7));
+        }
+
+        .module-image-icon {
+            font-size: 60px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+        }
+
+        .module-body { padding: 25px; flex: 1; display: flex; flex-direction: column; }
+
+        .module-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .module-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; flex: 1; }
+
+        .module-progress-bar { height: 6px; background: var(--bg-light); border-radius: 3px; overflow: hidden; margin-bottom: 12px; }
+        .module-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 3px; width: 0%; transition: width 0.6s ease;
+        }
+
+        .module-status { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .status-done { color: var(--accent-green); }
+        .status-pending { color: var(--accent-yellow); }
+
+        /* --- Экран модуля --- */
+        .module-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 15px; flex-wrap: wrap; }
+
+        .back-btn {
+            background: var(--bg-white); border: 1px solid var(--border-light);
+            color: var(--text-dark); padding: 12px 24px; border-radius: 12px;
+            cursor: pointer; font-size: 14px; font-weight: 600;
+            transition: all 0.3s; display: flex; align-items: center; gap: 8px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-btn:hover { background: var(--accent-primary); color: white; transform: translateX(-3px); }
+
+        .timer-box {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--bg-white); padding: 10px 20px;
+            border-radius: 12px; font-weight: 700; font-size: 15px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s;
+        }
+
+        .timer-box.warning { background: rgba(239, 68, 68, 0.1); border-color: var(--accent-red); color: var(--accent-red); animation: pulse 1s infinite; }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .theory-block {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(6, 182, 212, 0.05));
+            border-left: 5px solid var(--accent-primary);
+            padding: 25px; border-radius: 0 16px 16px 0;
+            margin-bottom: 25px; font-size: 15px; line-height: 1.7;
+            animation: fadeIn 0.5s;
+        }
+
+        .theory-block h3 {
+            color: var(--accent-primary); margin-bottom: 15px;
+            font-size: 18px; display: flex; align-items: center; gap: 10px;
+        }
+
+        .theory-block ul { margin: 15px 0 15px 25px; }
+        .theory-block li { margin-bottom: 8px; }
+        .theory-block strong { color: var(--accent-primary); }
+        .theory-block em { color: var(--accent-red); font-style: normal; font-weight: 600; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .quiz-container {
+            background: var(--bg-white); border: 1px solid var(--border-light);
+            border-radius: 20px; padding: 35px; margin-bottom: 20px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .quiz-question { font-size: 21px; font-weight: 700; margin-bottom: 25px; line-height: 1.4; }
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+
+        .quiz-option {
+            background: var(--bg-light); border: 2px solid transparent;
+            padding: 18px 22px; border-radius: 14px; cursor: pointer;
+            transition: all 0.3s; font-size: 15px; text-align: left;
+            color: var(--text-dark); font-weight: 500;
+            display: flex; align-items: center; gap: 15px;
+            position: relative; overflow: hidden;
+        }
+
+        .quiz-option::before {
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 5px;
+            background: var(--accent-primary); transform: scaleY(0); transition: transform 0.3s;
+        }
+
+        .quiz-option:hover:not(.disabled) {
+            background: white; border-color: var(--accent-primary);
+            transform: translateX(8px);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.15);
+        }
+
+        .quiz-option:hover:not(.disabled)::before { transform: scaleY(1); }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.1); border-color: var(--accent-green);
+            color: var(--accent-green); font-weight: 700;
+        }
+
+        .quiz-option.wrong {
+            background: rgba(239, 68, 68, 0.1); border-color: var(--accent-red);
+            color: var(--accent-red); font-weight: 700; animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .quiz-option.disabled { cursor: not-allowed; opacity: 0.8; }
+
+        .option-letter {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--bg-white); display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px; color: var(--accent-primary);
+            flex-shrink: 0; border: 2px solid var(--border-light);
+        }
+
+        .quiz-option.correct .option-letter { background: var(--accent-green); color: white; border-color: var(--accent-green); }
+        .quiz-option.wrong .option-letter { background: var(--accent-red); color: white; border-color: var(--accent-red); }
+
+        /* --- Фидбек --- */
+        .feedback-box {
+            display: none; margin-top: 20px; padding: 22px; border-radius: 14px;
+            font-size: 15px; line-height: 1.6;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        .feedback-box.success { background: rgba(16, 185, 129, 0.1); border: 2px solid var(--accent-green); display: block; }
+        .feedback-box.error { background: rgba(239, 68, 68, 0.1); border: 2px solid var(--accent-red); display: block; }
+
+        .feedback-box h4 { margin-bottom: 10px; font-size: 17px; display: flex; align-items: center; gap: 8px; }
+        .feedback-box.success h4 { color: var(--accent-green); }
+        .feedback-box.error h4 { color: var(--accent-red); }
+
+        .next-btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none; color: white; padding: 16px 36px; border-radius: 14px;
+            font-size: 16px; font-weight: 700; cursor: pointer;
+            margin-top: 25px; transition: all 0.3s;
+            align-self: flex-end; display: none;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .next-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4); }
+        .next-btn.visible { display: block; animation: slideUp 0.3s; }
+
+        /* --- Прогресс-бар модуля --- */
+        .progress-bar-container {
+            width: 100%; height: 8px; background: var(--bg-light);
+            border-radius: 4px; overflow: hidden; margin-bottom: 25px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 4px; width: 0%; transition: width 0.5s ease;
+        }
+
+        /* --- Финальный экран --- */
+        .final-screen {
+            text-align: center; padding: 50px 30px;
+            background: var(--bg-white); border: 1px solid var(--border-light);
+            border-radius: 24px; position: relative; overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .final-content { position: relative; z-index: 1; }
+
+        .final-icon { font-size: 80px; margin-bottom: 20px; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        .final-screen h2 { font-size: 36px; margin-bottom: 15px; color: var(--accent-primary); }
+
+        /* Круговой прогресс */
+        .circle-progress {
+            width: 180px;
+            height: 180px;
+            margin: 30px auto;
+            position: relative;
+        }
+
+        .circle-progress svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+
+        .circle-progress circle {
+            fill: none;
+            stroke-width: 12;
+            stroke-linecap: round;
+        }
+
+        .circle-bg { stroke: var(--bg-light); }
+        .circle-fill {
+            stroke: url(#gradient);
+            stroke-dasharray: 502;
+            stroke-dashoffset: 502;
+            transition: stroke-dashoffset 1.5s ease-out;
+        }
+
+        .circle-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .circle-text-value { font-size: 38px; font-weight: 800; color: var(--accent-primary); }
+        .circle-text-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .final-stats {
+            display: flex; justify-content: center; gap: 30px;
+            margin: 30px 0; flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: var(--bg-light); padding: 20px 35px;
+            border-radius: 18px; border: 2px solid var(--border-light);
+            min-width: 150px; transition: transform 0.3s;
+        }
+
+        .stat-box:hover { transform: translateY(-5px); border-color: var(--accent-primary); }
+        .stat-value { font-size: 32px; font-weight: 800; color: var(--accent-primary); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .action-buttons {
+            display: flex; justify-content: center; gap: 15px;
+            flex-wrap: wrap; margin-top: 20px;
+        }
+
+        .restart-btn, .share-btn {
+            border: none; color: white; padding: 16px 35px;
+            border-radius: 14px; font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .share-btn {
+            background: linear-gradient(135deg, var(--accent-green), #059669);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .restart-btn:hover, .share-btn:hover { transform: translateY(-3px) scale(1.02); }
+
+        /* --- Конфетти --- */
+        .confetti {
+            position: fixed; width: 10px; height: 10px;
+            animation: confettiFall 3s linear forwards;
+            z-index: 9999; pointer-events: none;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* --- Уведомление --- */
+        .notification {
+            position: fixed; top: 20px; right: 20px;
+            background: var(--accent-green); color: white;
+            padding: 15px 25px; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            font-weight: 600; z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .notification.show { transform: translateX(0); }
+
+        /* --- Адаптив --- */
+        @media (max-width: 768px) {
+            .header-top { padding: 12px 20px; flex-direction: column; gap: 15px; }
+            .header-bottom { padding: 10px 20px; flex-direction: column; gap: 10px; text-align: center; }
+            .hero h1 { font-size: 30px; }
+            .modules-grid { grid-template-columns: 1fr; }
+            .final-stats { flex-direction: column; gap: 15px; align-items: center; }
+            .quiz-container { padding: 25px; }
+            .college-info { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SVG-градиент для кругового прогресса -->
+    <svg width="0" height="0" style="position:absolute;">
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4f46e5" />
+                <stop offset="100%" stop-color="#06b6d4" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- Шапка -->
+    <header>
+        <div class="header-top">
+            <div class="college-info">
+                <div class="college-logo">СГК</div>
+                <div class="college-name">
+                    ГАПОУ "СГК"
+                    <span>Академия цифровой грамотности</span>
+                </div>
+            </div>
+            <div class="score-board">
+                <div class="score-item blue">🧠 Баллы: <span id="scoreDisplay">0</span></div>
+                <div class="score-item green">✅ Прогресс: <span id="progressDisplay">0/5</span></div>
+            </div>
+        </div>
+        <div class="header-bottom">
+            <div class="developers">
+                <div class="developer">
+                    <span class="developer-icon">👩‍🏫</span>
+                    <span>Преподаватель: <strong>Суркова Татьяна Сергеевна</strong></span>
+                </div>
+                <div class="developer">
+                    <span class="developer-icon">📚</span>
+                    <span>Методист: <strong>Толкачева Ирина Васильевна</strong></span>
+                </div>
+            </div>
+            <div><span>🎓 Образовательный проект 2026</span></div>
+        </div>
+    </header>
+
+    <!-- Контейнер -->
+    <div class="container">
+
+        <!-- ЭКРАН 1: ГЛАВНАЯ -->
+        <div class="screen active" id="screen-home">
+            <div class="hero">
+                <h1>Твой <span>цифровой иммунитет</span></h1>
+                <p>Интерактивный курс для студентов СПО: научись защищать данные, распознавать мошенников, строить безопасную карьеру и формировать цифровую культуру.</p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">5</div>
+                        <div class="hero-stat-label">Модулей</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">20</div>
+                        <div class="hero-stat-label">Вопросов</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">200</div>
+                        <div class="hero-stat-label">Баллов макс.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modules-grid" id="modulesGrid"></div>
+        </div>
+
+        <!-- ЭКРАН 2: МОДУЛЬ -->
+        <div class="screen" id="screen-module">
+            <div class="module-header">
+                <button class="back-btn" onclick="goHome()">← Назад к модулям</button>
+                <div class="timer-box" id="timerBox">⏱️ <span id="timerValue">30</span> сек</div>
+                <div style="font-weight: 700; color: var(--accent-primary);" id="moduleProgress">Вопрос 1/4</div>
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="moduleProgressBar"></div>
+            </div>
+
+            <div class="theory-block" id="theoryBlock"></div>
+
+            <div class="quiz-container">
+                <div class="quiz-question" id="quizQuestion">Загрузка вопроса...</div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="feedback-box" id="feedbackBox">
+                    <h4 id="feedbackTitle"></h4>
+                    <p id="feedbackText"></p>
+                </div>
+            </div>
+
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Следующий вопрос →</button>
+        </div>
+
+        <!-- ЭКРАН 3: ФИНАЛ -->
+        <div class="screen" id="screen-final">
+            <div class="final-screen">
+                <div class="final-content">
+                    <div class="final-icon">🏆</div>
+                    <h2>Курс пройден!</h2>
+                    <p style="color: var(--text-muted); font-size: 17px;">Вы успешно освоили программу «Цифровой иммунитет» в ГАПОУ "СГК".</p>
+                    
+                    <div class="circle-progress">
+                        <svg viewBox="0 0 180 180">
+                            <circle class="circle-bg" cx="90" cy="90" r="80"></circle>
+                            <circle class="circle-fill" id="circleFill" cx="90" cy="90" r="80"></circle>
+                        </svg>
+                        <div class="circle-text">
+                            <div class="circle-text-value" id="finalPercentCircle">0%</div>
+                            <div class="circle-text-label">Результат</div>
+                        </div>
+                    </div>
+
+                    <div class="final-stats">
+                        <div class="stat-box">
+                            <div class="stat-value" id="finalScore">0</div>
+                            <div class="stat-label">Баллов</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="finalCorrect">0</div>
+                            <div class="stat-label">Верных</div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="restart-btn" onclick="resetGame()">🔄 Пройти заново</button>
+                        <button class="share-btn" onclick="shareResult()">📤 Поделиться</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="notification" id="notification">✅ Скопировано в буфер обмена!</div>
+
+    <script>
+        // --- Данные курса (для студентов СПО) ---
+        const modulesData = [
+            {
+                id: 1,
+                title: "Цифровой этикет студента",
+                icon: "💬",
+                image: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=600&q=80",
+                desc: "Правила общения в студенческих чатах, уважение к преподавателям и одногруппникам, деловая переписка.",
+                theory: `
+                    <h3>📌 Что такое цифровой этикет?</h3>
+                    <p>В сети мы общаемся через текст, и интонация часто теряется. <strong>Цифровой этикет</strong> — это уважение к собеседнику и умение выстраивать границы.</p>
+                    <h3 style="margin-top:20px;">🎓 Особенности студенческой переписки:</h3>
+                    <ul>
+                        <li><strong>С преподавателем</strong> — только официальный тон, обращение по имени-отчеству, без смайлов и сокращений («спс», «пжл»).</li>
+                        <li><strong>В групповом чате</strong> — не флудить, не писать в 3 часа ночи, не обсуждать личное.</li>
+                        <li><strong>В личных сообщениях</strong> — уважать время другого: не требовать мгновенного ответа.</li>
+                    </ul>
+                    <h3 style="margin-top:20px;">🚩 Красные флаги:</h3>
+                    <ul>
+                        <li>Голосовые сообщения на 10 минут без предупреждения.</li>
+                        <li>КАПС (воспринимается как крик).</li>
+                        <li>Спам-рассылки и «перешли 10 друзьям».</li>
+                    </ul>
+                `,
+                questions: [
+                    {
+                        q: "Вы пишете преподавателю в мессенджере по поводу пересдачи. Как правильно начать сообщение?",
+                        options: [
+                            "Привет! Можно пересдать завтра?",
+                            "Здравствуйте, Татьяна Сергеевна! Извините за беспокойство. Могу ли я пересдать зачет завтра?",
+                            "Срочно! Когда пересдача?"
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Обращение по имени-отчеству, приветствие и вежливая формулировка — стандарт деловой переписки со преподавателем."
+                    },
+                    {
+                        q: "В чате группы одногруппник начал публиковать оскорбительные мемы про преподавателя. Ваши действия?",
+                        options: [
+                            "Поставить лайк, чтобы не портить отношения.",
+                            "Написать в личку: 'Прекрати, это неуважение. Могут быть проблемы у всей группы.'",
+                            "Скриншот и в открытый чат с осуждением."
+                        ],
+                        correct: 1,
+                        explanation: "Правильно! Личное сообщение — лучший способ остановить человека без публичного конфликта. Публичное осуждение может усугубить ситуацию."
+                    },
+                    {
+                        q: "Вы нашли в интернете бесплатный курс по специальности. Как поделиться им в чате группы?",
+                        options: [
+                            "Скинуть ссылку без комментариев.",
+                            "Написать: 'Вот курс, может кому пригодится. Я проверил, сайт официальный.'",
+                            "Отправить всем в личку с вопросом 'Ну что, слабаки, слабо?'"
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Краткое пояснение и предупреждение о проверке источника — признак цифровой культуры."
+                    },
+                    {
+                        q: "Одногруппник просит скинуть конспект в 2 часа ночи перед экзаменом. Как поступить?",
+                        options: [
+                            "Отправить, ведь это важно.",
+                            "Ответить утром, объяснив, что ночью нужно спать.",
+                            "Проигнорировать и обидеться."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Уважение к своему времени и сну — часть цифрового этикета. Можно помочь утром, но не в ущерб себе."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Детектив Фейк-Ньюс",
+                icon: "🔍",
+                image: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=80",
+                desc: "Критическое мышление, распознавание фейков, кликбейта и манипуляций в новостях и соцсетях.",
+                theory: `
+                    <h3>📌 Почему это важно для студента?</h3>
+                    <p>В эпоху информационного шума <strong>критическое мышление</strong> — ключевой навык. Мошенники и пропагандисты используют соцсети для манипуляции.</p>
+                    <h3 style="margin-top:20px;">🔍 Как распознать фейк?</h3>
+                    <ul>
+                        <li><strong>Проверьте источник:</strong> домен сайта должен быть официальным. <em>gov-ru.info</em> — не то же самое, что <em>gov.ru</em>.</li>
+                        <li><strong>Ищите автора и дату:</strong> анонимные новости без даты — красный флаг.</li>
+                        <li><strong>Оцените эмоции:</strong> «СРОЧНО!», «ШОК!», «Только у нас» — признаки кликбейта.</li>
+                        <li><strong>Проверьте в поисковике:</strong> введите заголовок и добавьте слово «фейк» или «правда ли».</li>
+                    </ul>
+                    <h3 style="margin-top:20px;">📊 Примеры манипуляций:</h3>
+                    <ul>
+                        <li>«Ученые доказали, что кофе опасен!» — без ссылки на исследование.</li>
+                        <li>Скриншоты без контекста.</li>
+                        <li>Фейковые аккаунты известных людей.</li>
+                    </ul>
+                `,
+                questions: [
+                    {
+                        q: "В соцсетях вирусный пост: 'СРОЧНО! Студентам отменят сессию!'. Ваши действия?",
+                        options: [
+                            "Поделиться со всеми — вдруг правда!",
+                            "Проверить на официальном сайте колледжа или Минобрнауки.",
+                            "Написать в комментариях: 'Наконец-то!'"
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Только официальные источники дают достоверную информацию. Фейки часто используют студентов для распространения."
+                    },
+                    {
+                        q: "Ссылка ведет на 'sberbank-online.ru.info'. Что это?",
+                        options: [
+                            "Официальный сайт Сбербанка.",
+                            "Фишинговая ссылка — мошенники используют похожие домены.",
+                            "Просто длинный домен, всё нормально."
+                        ],
+                        correct: 1,
+                        explanation: "Правильно! Мошенники добавляют слова к известному домену. Проверяйте адресную строку внимательно."
+                    },
+                    {
+                        q: "В новости нет даты, автора и ссылок на источники. Это значит...",
+                        options: [
+                            "Это анонимная новость, что нормально.",
+                            "Скорее всего, это фейк — настоящие новости всегда имеют автора.",
+                            "Это государственная тайна."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Отсутствие автора и даты — главный признак недостоверной информации."
+                    },
+                    {
+                        q: "Друг скинул видео с 'сенсацией' о конце света. Как проверить?",
+                        options: [
+                            "Поверить, ведь видео нельзя подделать.",
+                            "Вбить заголовок в поисковик и проверить на фактчекинговых сайтах.",
+                            "Отправить родственникам, чтобы предупредить."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Видео легко подделать (дипфейки). Проверка через фактчекеров (Snopes, Проверено.Медиа) — надёжный способ."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "Лабиринт Мошенников",
+                icon: "📞",
+                image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=600&q=80",
+                desc: "Финансовая безопасность: защита карт, распознавание телефонных и интернет-мошенников.",
+                theory: `
+                    <h3>💰 Студент — лакомая цель для мошенников</h3>
+                    <p>Стипендия, подработка, первая карта — всё это делает студентов уязвимыми. Мошенники используют незнание и доверчивость.</p>
+                    <h3 style="margin-top:20px;">🚨 Топ-5 схем мошенничества:</h3>
+                    <ul>
+                        <li><strong>«Служба безопасности банка»:</strong> просят код из СМС для «отмены транзакции». <em>Настоящий банк никогда не спрашивает коды!</em></li>
+                        <li><strong>«Вы выиграли приз»:</strong> просят оплатить «доставку» или «налог».</li>
+                        <li><strong>«Работа мечты»:</strong> просят предоплату за трудоустройство.</li>
+                        <li><strong>«Друг в беде»:</strong> взламывают аккаунт и просят деньги от имени друга.</li>
+                        <li><strong>«Инвестиции»:</strong> обещают быстрый доход, требуют вложений.</li>
+                    </ul>
+                    <h3 style="margin-top:20px;">✅ Золотые правила:</h3>
+                    <ul>
+                        <li>Никому не сообщайте CVV-код и коды из СМС.</li>
+                        <li>Перезвоните в банк по номеру с обратной стороны карты.</li>
+                        <li>Не переходите по ссылкам из подозрительных сообщений.</li>
+                        <li>Проверяйте работодателя перед оплатой.</li>
+                    </ul>
+                `,
+                questions: [
+                    {
+                        q: "Звонок: 'Здравствуйте, я из службы безопасности Сбербанка. Зафиксирована попытка списания. Продиктуйте код из СМС.' Ваши действия?",
+                        options: [
+                            "Продиктовать — нужно срочно спасать деньги.",
+                            "Сбросить и перезвонить по номеру с обратной стороны карты.",
+                            "Сказать: 'Перезвоните позже' и продолжить дела."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Настоящий банк никогда не звонит с просьбой сообщить код. Всегда перезванивайте по официальному номеру."
+                    },
+                    {
+                        q: "Объявление о подработке: 'Оплатите 1000 руб. за обучение — и получите доступ к высокооплачиваемым заказам.' Что это?",
+                        options: [
+                            "Обычная практика, стоит попробовать.",
+                            "Признак мошенничества — настоящий работодатель не берет деньги с соискателя.",
+                            "Инвестиция в себя."
+                        ],
+                        correct: 1,
+                        explanation: "Правильно! Если работа требует предоплаты — это почти всегда развод."
+                    },
+                    {
+                        q: "Друг в соцсети пишет: 'Срочно нужны 5000, кинь на карту, потом объясню'. Что делать?",
+                        options: [
+                            "Сразу перевести — друг же!",
+                            "Позвонить другу по телефону и проверить, действительно ли это он.",
+                            "Перевести половину, чтобы подстраховаться."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Аккаунты часто взламывают. Всегда проверяйте звонком."
+                    },
+                    {
+                        q: "Вам пришло СМС с ссылкой на 'обновление данных для получения стипендии'. Что делать?",
+                        options: [
+                            "Перейти и ввести данные — стипендия важна.",
+                            "Не переходить. Проверить информацию в деканате или учебной части.",
+                            "Переслать друзьям, чтобы они тоже знали."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Официальные учреждения не рассылают ссылки для обновления данных. Обратитесь в деканат."
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: "Токсичный фильтр",
+                icon: "🛡️",
+                image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=600&q=80",
+                desc: "Профилактика буллинга, деструктивных сообществ, опасных игр и незаконного контента.",
+                theory: `
+                    <h3>🚫 Что такое деструктивное поведение в сети?</h3>
+                    <p>Это буллинг, пропаганда опасных действий, вовлечение в незаконные активности, распространение экстремистского контента.</p>
+                    <h3 style="margin-top:20px;">⚠️ Опасные явления в сети:</h3>
+                    <ul>
+                        <li><strong>Кибербуллинг:</strong> травля в чатах, комментариях, соцсетях.</li>
+                        <li><strong>«Опасные игры»:</strong> квесты с заданиями, наносящими вред (например, «Синий кит»).</li>
+                        <li><strong>Деструктивные сообщества:</strong> группы, пропагандирующие насилие, суицид, экстремизм.</li>
+                        <li><strong>Вербовка:</strong> вовлечение в незаконные действия через «дружелюбное» общение.</li>
+                    </ul>
+                    <h3 style="margin-top:20px;">🛡️ Как защититься и помочь другим:</h3>
+                    <ul>
+                        <li>Не отвечать агрессией на агрессию.</li>
+                        <li>Сохранять скриншоты для доказательств.</li>
+                        <li>Блокировать и жаловаться (Report).</li>
+                        <li>Сообщать взрослым, куратору, психологу.</li>
+                        <li>Поддерживать жертву — это снижает риск последствий.</li>
+                    </ul>
+                `,
+                questions: [
+                    {
+                        q: "В чате группы начался буллинг студента из-за его внешности. Ваши действия?",
+                        options: [
+                            "Присоединиться к шуткам, чтобы не стать следующей жертвой.",
+                            "Написать в личку жертве поддержку и сообщить куратору.",
+                            "Промолчать — это не мое дело."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Поддержка жертвы и обращение к куратору — эффективные действия. Молчание = соучастие."
+                    },
+                    {
+                        q: "Незнакомец в соцсети предлагает 'интересный квест' с заданиями, первое — 'отправить фото в неприличной позе'. Что делать?",
+                        options: [
+                            "Пройти первый шаг, а потом отказаться.",
+                            "Заблокировать и сообщить в полицию/родителям — это вербовка.",
+                            "Пошутить и продолжить общение."
+                        ],
+                        correct: 1,
+                        explanation: "Правильно! Это признак деструктивного сообщества. Немедленно блокируйте и сообщайте взрослым."
+                    },
+                    {
+                        q: "Вы нашли группу, где обсуждают способы причинения вреда себе. Как поступить?",
+                        options: [
+                            "Пролистать и забыть.",
+                            "Вступить, чтобы понять, о чем речь.",
+                            "Сообщить в администрацию соцсети и взрослым (психологу, родителям)."
+                        ],
+                        correct: 2,
+                        explanation: "Верно! Такие группы опасны. Сообщите в администрацию платформы и взрослым — это может спасти чью-то жизнь."
+                    },
+                    {
+                        q: "Одногруппник публикует посты с призывами к незаконным действиям. Как реагировать?",
+                        options: [
+                            "Поставить лайк, чтобы поддержать.",
+                            "Сообщить куратору и не распространять контент.",
+                            "Переслать друзьям для обсуждения."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Распространение незаконного контента — тоже нарушение. Сообщите куратору, не пересылая дальше."
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: "Цифровая карьера и личный бренд",
+                icon: "💼",
+                image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=80",
+                desc: "Как соцсети влияют на трудоустройство, как создать безопасное портфолио и не потерять работу из-за постов.",
+                theory: `
+                    <h3>💼 Почему это важно?</h3>
+                    <p>Современные работодатели <strong>проверяют соцсети кандидатов</strong>. Ваш цифровой след формирует репутацию.</p>
+                    <h3 style="margin-top:20px;">🔍 Что смотрит работодатель:</h3>
+                    <ul>
+                        <li>Публикации с агрессией, матом, экстремизмом.</li>
+                        <li>Фото с алкоголем, наркотиками, оружием.</li>
+                        <li>Комментарии, оскорбляющие других.</li>
+                        <li>Скандалы в публичном пространстве.</li>
+                    </ul>
+                    <h3 style="margin-top:20px;">✅ Как построить положительный цифровой след:</h3>
+                    <ul>
+                        <li>Публикуйте проекты, сертификаты, достижения.</li>
+                        <li>Ведите профессиональный блог по специальности.</li>
+                        <li>Участвуйте в онлайн-конференциях и конкурсах.</li>
+                        <li>Соблюдайте этикет даже в спорах.</li>
+                    </ul>
+                    <h3 style="margin-top:20px;">🛡️ Правила безопасности:</h3>
+                    <ul>
+                        <li>Настройте приватность личных аккаунтов.</li>
+                        <li>Создайте отдельный профессиональный профиль.</li>
+                        <li>Не публикуйте геолокацию в реальном времени.</li>
+                        <li>Не выкладывайте документы и фото паспорта.</li>
+                    </ul>
+                `,
+                questions: [
+                    {
+                        q: "Работодатель проверяет соцсети перед собеседованием. Какой контент может помешать трудоустройству?",
+                        options: [
+                            "Посты с достижениями и сертификатами.",
+                            "Фото с вечеринок с алкоголем и матом в комментариях.",
+                            "Публикации проектов по специальности."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Фото с алкоголем и нецензурная лексика могут создать негативное впечатление."
+                    },
+                    {
+                        q: "Как правильно оформить профиль для поиска работы?",
+                        options: [
+                            "Закрыть все соцсети и не иметь аккаунтов.",
+                            "Создать профессиональный профиль с фото, описанием навыков и портфолио.",
+                            "Использовать личный аккаунт с мемами и шутками."
+                        ],
+                        correct: 1,
+                        explanation: "Правильно! Профессиональный профиль с портфолио помогает работодателю увидеть ваши сильные стороны."
+                    },
+                    {
+                        q: "Вы нашли вакансию мечты. Работодатель просит прислать фото паспорта до собеседования. Что делать?",
+                        options: [
+                            "Отправить — это стандартная процедура.",
+                            "Отказаться и уточнить, на каком этапе нужны документы. Это может быть мошенничество.",
+                            "Отправить только первую страницу."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Настоящие работодатели запрашивают документы только при официальном трудоустройстве."
+                    },
+                    {
+                        q: "Ваш пост с критикой бывшего работодателя стал вирусным. Чем это грозит?",
+                        options: [
+                            "Ничем — свобода слова.",
+                            "Проблемами при трудоустройстве: работодатели увидят и не захотят рисковать.",
+                            "Только лайками от подписчиков."
+                        ],
+                        correct: 1,
+                        explanation: "Верно! Публичная критика работодателя — плохой сигнал для будущих нанимателей. Обсуждайте проблемы лично."
+                    }
+                ]
+            }
+        ];
+
+        // --- Состояние игры ---
+        let state = {
+            score: 0,
+            completedModules: [],
+            correctAnswers: 0,
+            totalQuestions: 0
+        };
+
+        // --- Переменные текущего модуля ---
+        let currentModule = null;
+        let currentQuestionIndex = 0;
+        let answered = false;
+        let timerInterval = null;
+        let timeLeft = 30;
+
+        // --- Инициализация ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderModulesGrid();
+            updateScoreBoard();
+        });
+
+        // --- Отрисовка сетки модулей ---
+        function renderModulesGrid() {
+            const grid = document.getElementById('modulesGrid');
+            grid.innerHTML = '';
+
+            modulesData.forEach(mod => {
+                const isCompleted = state.completedModules.includes(mod.id);
+                const card = document.createElement('div');
+                card.className = 'module-card';
+                card.onclick = () => startModule(mod.id);
+                card.innerHTML = `
+                    <div class="module-image" style="background-image: url('${mod.image}');">
+                        <span class="module-image-icon">${mod.icon}</span>
+                    </div>
+                    <div class="module-body">
+                        <div class="module-title">${mod.title}</div>
+                        <div class="module-desc">${mod.desc}</div>
+                        <div class="module-progress-bar">
+                            <div class="module-progress-fill" style="width: ${isCompleted ? '100%' : '0%'}"></div>
+                        </div>
+                        <div class="module-status ${isCompleted ? 'status-done' : 'status-pending'}">
+                            ${isCompleted ? '✅ Пройдено' : '⏳ Не начато'}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- Обновление шапки ---
+        function updateScoreBoard() {
+            document.getElementById('scoreDisplay').textContent = state.score;
+            document.getElementById('progressDisplay').textContent = `${state.completedModules.length}/5`;
+        }
+
+        // --- Навигация ---
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function goHome() {
+            clearInterval(timerInterval);
+            showScreen('screen-home');
+            renderModulesGrid();
+            updateScoreBoard();
+        }
+
+        // --- Таймер ---
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 30;
+            updateTimerDisplay();
+            
+            const timerBox = document.getElementById('timerBox');
+            timerBox.classList.remove('warning');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft <= 10) {
+                    timerBox.classList.add('warning');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    // Автоматически показываем неправильный ответ
+                    if (!answered) {
+                        const options = document.querySelectorAll('.quiz-option');
+                        options.forEach(opt => opt.classList.add('disabled'));
+                        const question = currentModule.questions[currentQuestionIndex];
+                        options[question.correct].classList.add('correct');
+                        
+                        answered = true;
+                        const feedbackBox = document.getElementById('feedbackBox');
+                        feedbackBox.className = 'feedback-box error';
+                        document.getElementById('feedbackTitle').textContent = '⏰ Время вышло!';
+                        document.getElementById('feedbackText').textContent = question.explanation;
+                        
+                        const nextBtn = document.getElementById('nextBtn');
+                        nextBtn.textContent = currentQuestionIndex < currentModule.questions.length - 1 ? 'Следующий вопрос →' : 'Завершить модуль ✓';
+                        nextBtn.classList.add('visible');
+                        state.totalQuestions++;
+                        updateScoreBoard();
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timerValue').textContent = timeLeft;
+        }
+
+        // --- Логика модуля ---
+        function startModule(moduleId) {
+            currentModule = modulesData.find(m => m.id === moduleId);
+            currentQuestionIndex = 0;
+            answered = false;
+
+            document.getElementById('theoryBlock').innerHTML = currentModule.theory;
+            document.getElementById('moduleProgress').textContent = `Вопрос 1/${currentModule.questions.length}`;
+            document.getElementById('moduleProgressBar').style.width = '0%';
+            
+            showScreen('screen-module');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const question = currentModule.questions[currentQuestionIndex];
+            const optionsContainer = document.getElementById('quizOptions');
+            const feedbackBox = document.getElementById('feedbackBox');
+            const nextBtn = document.getElementById('nextBtn');
+
+            answered = false;
+            feedbackBox.className = 'feedback-box';
+            feedbackBox.style.display = 'none';
+            nextBtn.classList.remove('visible');
+
+            document.getElementById('quizQuestion').textContent = question.q;
+            document.getElementById('moduleProgress').textContent = `Вопрос ${currentQuestionIndex + 1}/${currentModule.questions.length}`;
+            
+            const progressPercent = (currentQuestionIndex / currentModule.questions.length) * 100;
+            document.getElementById('moduleProgressBar').style.width = `${progressPercent}%`;
+
+            optionsContainer.innerHTML = '';
+            question.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                const letter = String.fromCharCode(65 + index);
+                btn.innerHTML = `<span class="option-letter">${letter}</span> ${opt}`;
+                btn.onclick = () => selectAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            startTimer();
+        }
+
+        function selectAnswer(selectedIndex, btnElement) {
+            if (answered) return;
+            answered = true;
+            clearInterval(timerInterval);
+
+            const question = currentModule.questions[currentQuestionIndex];
+            const options = document.querySelectorAll('.quiz-option');
+            const feedbackBox = document.getElementById('feedbackBox');
+            const feedbackTitle = document.getElementById('feedbackTitle');
+            const feedbackText = document.getElementById('feedbackText');
+            const nextBtn = document.getElementById('nextBtn');
+
+            options.forEach(opt => opt.classList.add('disabled'));
+
+            if (selectedIndex === question.correct) {
+                btnElement.classList.add('correct');
+                state.score += 10;
+                state.correctAnswers++;
+                feedbackBox.className = 'feedback-box success';
+                feedbackTitle.textContent = '✅ Верно!';
+                feedbackText.textContent = question.explanation;
+                createConfetti();
+            } else {
+                btnElement.classList.add('wrong');
+                options[question.correct].classList.add('correct');
+                feedbackBox.className = 'feedback-box error';
+                feedbackTitle.textContent = '❌ Ошибка!';
+                feedbackText.textContent = question.explanation;
+            }
+
+            state.totalQuestions++;
+            updateScoreBoard();
+
+            if (currentQuestionIndex < currentModule.questions.length - 1) {
+                nextBtn.textContent = 'Следующий вопрос →';
+            } else {
+                nextBtn.textContent = 'Завершить модуль ✓';
+            }
+            nextBtn.classList.add('visible');
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentModule.questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                if (!state.completedModules.includes(currentModule.id)) {
+                    state.completedModules.push(currentModule.id);
+                }
+                updateScoreBoard();
+                
+                if (state.completedModules.length === 5) {
+                    finishGame();
+                } else {
+                    goHome();
+                }
+            }
+        }
+
+        // --- Финал ---
+        function finishGame() {
+            const percent = Math.round((state.correctAnswers / state.totalQuestions) * 100);
+            
+            document.getElementById('finalScore').textContent = state.score;
+            document.getElementById('finalCorrect').textContent = `${state.correctAnswers}/${state.totalQuestions}`;
+            document.getElementById('finalPercentCircle').textContent = `${percent}%`;
+            
+            // Анимируем круговой прогресс
+            const circle = document.getElementById('circleFill');
+            const circumference = 2 * Math.PI * 80;
+            const offset = circumference - (percent / 100) * circumference;
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+            }, 100);
+            
+            showScreen('screen-final');
+            createConfetti();
+            setTimeout(createConfetti, 500);
+            setTimeout(createConfetti, 1000);
+        }
+
+        // --- Сброс ---
+        function resetGame() {
+            state = {
+                score: 0,
+                completedModules: [],
+                correctAnswers: 0,
+                totalQuestions: 0
+            };
+            const circle = document.getElementById('circleFill');
+            if (circle) circle.style.strokeDashoffset = 502;
+            goHome();
+        }
+
+        // --- Поделиться ---
+        function shareResult() {
+            const percent = Math.round((state.correctAnswers / state.totalQuestions) * 100);
+            const text = `Я прошел курс «Цифровой иммунитет» в ГАПОУ "СГК"! Мой результат: ${state.score} баллов, ${percent}% правильных ответов. Рекомендую пройти! 🎓`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('✅ Результат скопирован! Отправьте друзьям.');
+            }).catch(() => {
+                showNotification('⚠️ Не удалось скопировать');
+            });
+        }
+
+        function showNotification(message) {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), 3000);
+        }
+
+        // --- Конфетти ---
+        function createConfetti() {
+            const colors = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 8 + 5 + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+    </script>
+</body>
+</html>
